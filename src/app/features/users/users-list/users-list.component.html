@@ -1,39 +1,50 @@
 <div class="min-h-screen bg-gray-50 py-8">
   <mat-card class="w-full max-w-7xl mx-auto bg-white shadow-lg rounded-lg">
-    <mat-card-header class="p-6 border-b">
-      <mat-card-title class="text-2xl font-bold text-gray-800">จัดการผู้ใช้งาน</mat-card-title>
+    <mat-card-header class="p-6">
+      <mat-card-title class="text-2xl font-bold text-gray-800"
+        >จัดการผู้ใช้งาน</mat-card-title
+      >
     </mat-card-header>
     <mat-card-content class="p-6">
-      <div class="mb-6 flex items-center justify-between gap-4">
+      <div class="mb-6 flex items-center justify-end gap-4">
         <mat-form-field appearance="outline" class="w-80">
           <mat-icon matPrefix class="text-gray-400 mr-2">search</mat-icon>
-          <input matInput
-                 (keyup)="applyFilter($event)"
-                 [value]="(dataSource.filter || '')"
-                 placeholder="ค้นหาผู้ใช้งาน...">
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            [value]="dataSource.filter || ''"
+            placeholder="ค้นหาผู้ใช้งาน..."
+          />
         </mat-form-field>
 
         <div class="flex items-center gap-3">
-          <button mat-flat-button color="primary" (click)="openUserForm()" 
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center min-w-[160px] justify-center">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="openUserForm()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center"
+          >
             <mat-icon class="mr-2">add</mat-icon>
             เพิ่มผู้ใช้งาน
           </button>
 
-          <button mat-stroked-button [matMenuTriggerFor]="columnMenu" 
-                  class="border border-gray-300 hover:bg-gray-50 px-4 py-2.5 rounded-lg flex items-center min-w-[120px] justify-center">
-            <mat-icon class="mr-2">view_column</mat-icon>
-            คอลัมน์
-          </button>
-          <mat-menu #columnMenu="matMenu" xPosition="before" class="min-w-[200px]">
+          <mat-menu
+            #columnMenu="matMenu"
+            xPosition="before"
+            class="min-w-[200px]"
+          >
             <div class="p-2">
-              <div class="text-sm font-medium text-gray-700 px-3 py-2 border-b">จัดการคอลัมน์</div>
+              <div class="text-sm font-medium text-gray-700 px-3 py-2 border-b">
+                จัดการคอลัมน์
+              </div>
               <ng-container *ngFor="let column of displayedColumns">
-                <mat-checkbox *ngIf="column !== 'select' && column !== 'actions'"
-                             (change)="toggleColumn(column)"
-                             [checked]="isColumnVisible(column)"
-                             class="mx-3 my-2 block">
-                  {{getColumnName(column)}}
+                <mat-checkbox
+                  *ngIf="column !== 'select' && column !== 'actions'"
+                  (change)="toggleColumn(column)"
+                  [checked]="isColumnVisible(column)"
+                  class="mx-3 my-2 block"
+                >
+                  {{ getColumnName(column) }}
                 </mat-checkbox>
               </ng-container>
             </div>
@@ -47,87 +58,152 @@
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef class="bg-gray-50">
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                             [checked]="selection.hasValue() && isAllSelected()"
-                             [indeterminate]="selection.hasValue() && !isAllSelected()">
+                <mat-checkbox
+                  (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                >
                 </mat-checkbox>
               </th>
               <td mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()"
-                             (change)="$event ? selection.toggle(row) : null"
-                             [checked]="selection.isSelected(row)">
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)"
+                >
                 </mat-checkbox>
               </td>
             </ng-container>
 
             <!-- Avatar Column -->
             <ng-container matColumnDef="avatar">
-              <th mat-header-cell *matHeaderCellDef class="bg-gray-50"> {{getColumnName('avatar')}} </th>
+              <th mat-header-cell *matHeaderCellDef class="bg-gray-50">
+                {{ getColumnName("avatar") }}
+              </th>
               <td mat-cell *matCellDef="let row">
-                <img [src]="row.avatar" class="w-10 h-10 rounded-full object-cover">
+                <img
+                  [src]="row.avatar"
+                  class="w-10 h-10 rounded-full object-cover"
+                />
               </td>
             </ng-container>
 
             <!-- Full Name Column -->
             <ng-container matColumnDef="fullName">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> {{getColumnName('fullName')}} </th>
-              <td mat-cell *matCellDef="let row"> {{row.fullName}} </td>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="bg-gray-50"
+              >
+                {{ getColumnName("fullName") }}
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
             </ng-container>
 
             <!-- Email Column -->
             <ng-container matColumnDef="email">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> {{getColumnName('email')}} </th>
-              <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="bg-gray-50"
+              >
+                {{ getColumnName("email") }}
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.email }}</td>
             </ng-container>
 
             <!-- Role Column -->
             <ng-container matColumnDef="role">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> {{getColumnName('role')}} </th>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="bg-gray-50"
+              >
+                {{ getColumnName("role") }}
+              </th>
               <td mat-cell *matCellDef="let row">
-                <span class="px-3 py-1 rounded-full text-sm"
-                      [ngClass]="{
-                        'bg-purple-100 text-purple-700': row.role === 'ผู้ดูแลระบบ',
-                        'bg-blue-100 text-blue-700': row.role === 'ผู้จัดการ',
-                        'bg-gray-100 text-gray-700': row.role === 'ผู้ใช้งานทั่วไป'
-                      }">
-                  {{row.role}}
+                <span
+                  class="px-3 py-1 rounded-full text-sm"
+                  [ngClass]="{
+                    'bg-purple-100 text-purple-700': row.role === 'ผู้ดูแลระบบ',
+                    'bg-blue-100 text-blue-700': row.role === 'ผู้จัดการ',
+                    'bg-gray-100 text-gray-700': row.role === 'ผู้ใช้งานทั่วไป'
+                  }"
+                >
+                  {{ row.role }}
                 </span>
               </td>
             </ng-container>
 
             <!-- Status Column -->
             <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> {{getColumnName('status')}} </th>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="bg-gray-50"
+              >
+                {{ getColumnName("status") }}
+              </th>
               <td mat-cell *matCellDef="let row">
                 <span class="flex items-center">
-                  <span class="w-2 h-2 rounded-full mr-2"
-                        [ngClass]="{'bg-green-500': row.status === 'active', 'bg-red-500': row.status === 'inactive'}">
+                  <span
+                    class="w-2 h-2 rounded-full mr-2"
+                    [ngClass]="{
+                      'bg-green-500': row.status === 'active',
+                      'bg-red-500': row.status === 'inactive'
+                    }"
+                  >
                   </span>
-                  {{row.status === 'active' ? 'ใช้งาน' : 'ไม่ใช้งาน'}}
+                  {{ row.status === "active" ? "ใช้งาน" : "ไม่ใช้งาน" }}
                 </span>
               </td>
             </ng-container>
 
             <!-- Last Login Column -->
             <ng-container matColumnDef="lastLogin">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50"> {{getColumnName('lastLogin')}} </th>
-              <td mat-cell *matCellDef="let row"> {{row.lastLogin | date:'medium':'th'}} </td>
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="bg-gray-50"
+              >
+                {{ getColumnName("lastLogin") }}
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ formatDate(row.lastLogin) }}
+              </td>
             </ng-container>
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef class="bg-gray-50"> </th>
+              <th mat-header-cell *matHeaderCellDef class="bg-gray-50"></th>
               <td mat-cell *matCellDef="let row">
-                <button mat-icon-button [matMenuTriggerFor]="menu" class="text-gray-500 hover:text-gray-700">
+                <button
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  class="text-gray-500 hover:text-gray-700"
+                >
                   <mat-icon>more_vert</mat-icon>
                 </button>
-                <mat-menu #menu="matMenu" xPosition="before" class="min-w-[160px]">
+                <mat-menu
+                  #menu="matMenu"
+                  xPosition="before"
+                  class="min-w-[160px]"
+                >
                   <button mat-menu-item (click)="openUserForm(row)">
                     <mat-icon class="text-blue-600">edit</mat-icon>
                     <span>แก้ไข</span>
                   </button>
                   <mat-divider></mat-divider>
-                  <button mat-menu-item (click)="deleteUser(row)" class="text-red-600">
+                  <button
+                    mat-menu-item
+                    (click)="deleteUser(row)"
+                    class="text-red-600"
+                  >
                     <mat-icon class="text-red-600">delete</mat-icon>
                     <span>ลบ</span>
                   </button>
@@ -136,25 +212,35 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                class="hover:bg-gray-50 transition-colors"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              class="hover:bg-gray-50 transition-colors"
+            ></tr>
           </table>
         </div>
 
-        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-                      [pageSize]="20"
-                      class="border-t"
-                      aria-label="เลือกหน้า">
+        <mat-paginator
+          [pageSizeOptions]="pageSizeOptions"
+          [pageSize]="pageSize"
+          showFirstLastButtons
+          aria-label="Select page of users"
+        >
         </mat-paginator>
       </div>
 
       <div class="flex items-center justify-between mt-4 text-sm text-gray-600">
         <div>
-          {{selection.selected.length}} จาก {{dataSource.filteredData.length}} รายการที่เลือก
+          {{ selection.selected.length }} จาก
+          {{ dataSource.filteredData.length }} รายการที่เลือก
         </div>
         <div *ngIf="selection.selected.length > 0">
-          <button mat-stroked-button color="warn" (click)="deleteSelectedUsers()"
-                  class="border border-red-300 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg">
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="deleteSelectedUsers()"
+            class="border border-red-300 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg"
+          >
             <mat-icon class="mr-2">delete</mat-icon>
             ลบรายการที่เลือก
           </button>

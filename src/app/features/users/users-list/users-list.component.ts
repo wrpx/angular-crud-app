@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { DatePipe } from '@angular/common';
 
 import { User } from '../../../core/models/user.model';
 import { UsersService } from '../users.service';
@@ -40,9 +41,10 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
     MatDialogModule,
     MatSnackBarModule,
     MatDividerModule
-]
+  ],
+  providers: [DatePipe]
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, AfterViewInit {
   displayedColumns = [
     'select',
     'avatar',
@@ -53,16 +55,21 @@ export class UsersListComponent implements OnInit {
     'lastLogin',
     'actions'
   ];
-  dataSource: MatTableDataSource<User>;
+  dataSource = new MatTableDataSource<User>();
   selection = new SelectionModel<User>(true, []);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  // กำหนดค่าเริ่มต้น
+  pageSizeOptions = [5, 10, 20];
+  pageSize = 10;
+
   constructor(
     private dialog: MatDialog,
     private usersService: UsersService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) {
     // Mock data
     const mockUsers: User[] = [
@@ -112,11 +119,14 @@ export class UsersListComponent implements OnInit {
         lastLogin: new Date('2025-01-17T16:30:00'),
       }
     ];
-    this.dataSource = new MatTableDataSource(mockUsers);
+    this.dataSource.data = mockUsers;
   }
 
   ngOnInit() {
-    // this.loadUsers();
+    this.usersService.getUsers().subscribe(users => {
+      this.dataSource.data = users;
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   ngAfterViewInit() {
@@ -124,17 +134,15 @@ export class UsersListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  // loadUsers() {
-  //   this.usersService.getUsers().subscribe(users => {
-  //     this.dataSource.data = users;
-  //   });
-  // }
-
   formatAmount(amount: number): string {
     return new Intl.NumberFormat('th-TH', {
       style: 'currency',
       currency: 'THB'
     }).format(amount);
+  }
+
+  formatDate(date: Date): string {
+    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') || '';
   }
 
   applyFilter(event: Event) {
@@ -184,7 +192,6 @@ export class UsersListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Mock implementation
         this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
         this.snackBar.open('ลบผู้ใช้สำเร็จ', 'ปิด', { duration: 3000 });
       }

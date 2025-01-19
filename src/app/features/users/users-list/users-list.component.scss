@@ -1,1 +1,41 @@
-// Empty file - using Tailwind CSS for styling
+.mat-mdc-card {
+  margin: 2rem auto;
+  max-width: 90%;
+  width: 1200px;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mat-mdc-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+
+  th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  td {
+    background-color: white;
+  }
+
+  tr:hover td {
+    background-color: #f3f4f6;
+  }
+}
+
+.mat-paginator {
+  background-color: transparent;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 0;
+}
+
+.mat-paginator-page-size {
+  margin-right: 1rem;
+}
+
+.mat-paginator-range-actions {
+  margin-left: auto;
+}

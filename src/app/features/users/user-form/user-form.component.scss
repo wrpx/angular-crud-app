@@ -1,7 +1,8 @@
 :host {
   display: block;
-  min-width: 350px;
-  max-width: 500px;
+  min-width: 400px;
+  max-width: 600px;
+  padding: 2rem;
 }
 
 h2 {
@@ -9,6 +10,7 @@ h2 {
   font-size: 1.5rem;
   font-weight: 500;
   color: #1a237e;
+  margin-bottom: 1.5rem;
 }
 
 mat-dialog-content {
@@ -34,9 +36,9 @@ mat-slide-toggle {
   margin: 1rem 0;
 }
 
-mat-dialog-actions {
-  padding: 1rem;
-  margin-bottom: 0;
+.mat-mdc-dialog-actions {
+  padding: 1rem 0;
+  margin-top: 1rem;
   justify-content: flex-end;
   gap: 0.5rem;
 

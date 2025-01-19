@@ -44,8 +44,7 @@ export class UserFormComponent implements OnInit {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      role: ['', [Validators.required]],
-      active: [true]
+      role: ['', [Validators.required]]
     });
 
     if (this.isEditMode) {
