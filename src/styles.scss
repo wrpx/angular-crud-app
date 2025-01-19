@@ -3,5 +3,72 @@
 @use 'tailwindcss/utilities' as utilities;
 
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Material Design Theme Customization */
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+.mat-mdc-card-header {
+  padding: 1rem;
+}
+
+.mat-mdc-card-content {
+  padding: 1rem !important;
+}
+
+.mat-mdc-table {
+  background: white !important;
+}
+
+.mat-mdc-row:hover {
+  background: rgb(243 244 246) !important;
+}
+
+.mat-mdc-row.selected {
+  background: rgb(243 244 246) !important;
+}
+
+/* Custom button styles */
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+  --mat-mdc-button-persistent-ripple-color: currentColor;
+  --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.1);
+}
+
+.mat-mdc-outlined-button {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Form field styles */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field-appearance-outline .mat-mdc-form-field-wrapper {
+  margin: 0 !important;
+}
+
+/* Menu styles */
+.mat-mdc-menu-panel {
+  min-width: 112px !important;
+  max-width: 280px !important;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 48px) !important;
+  border-radius: 4px !important;
+  outline: 0;
+  min-height: 64px !important;
+}
+
+/* Icon button styles */
+.mat-mdc-icon-button {
+  --mdc-icon-button-state-layer-size: 48px;
+}
