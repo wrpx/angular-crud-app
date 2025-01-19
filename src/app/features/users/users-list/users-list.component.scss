@@ -40,3 +40,13 @@
   margin-left: auto;
 }
 
+.mat-mdc-row {
+  &.selected {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+

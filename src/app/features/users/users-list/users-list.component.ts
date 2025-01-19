@@ -52,8 +52,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     'email',
     'role',
     'status',
-    'lastLogin',
-    'actions'
+    'lastLogin'
   ];
   dataSource = new MatTableDataSource<User>();
   selection = new SelectionModel<User>(true, []);
@@ -154,7 +153,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  isAllSelected() {
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -168,15 +167,27 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     this.selection.select(...this.dataSource.data);
   }
 
-  openUserForm(user?: User) {
+  isAddDisabled(): boolean {
+    return this.selection.selected.length > 0;
+  }
+
+  isEditDisabled(): boolean {
+    return this.isAllSelected() || this.selection.selected.length !== 1;
+  }
+
+  openUserForm(user?: User): void {
+    if (!user && this.selection.selected.length > 0) return;
+    
+    if (user && (this.isAllSelected() || this.selection.selected.length !== 1)) return;
+    
     const dialogRef = this.dialog.open(UserFormComponent, {
-      width: '600px',
+      width: '500px',
       data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.loadUsers();
+        this.loadUsers();
       }
     });
   }
@@ -192,8 +203,13 @@ export class UsersListComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
-        this.snackBar.open('ลบผู้ใช้สำเร็จ', 'ปิด', { duration: 3000 });
+        this.usersService.deleteUser(user.id).subscribe(success => {
+          if (success) {
+            this.snackBar.open('ลบผู้ใช้สำเร็จ', 'ปิด', { duration: 3000 });
+            // รีโหลดข้อมูลใหม่
+            this.loadUsers();
+          }
+        });
       }
     });
   }
@@ -214,9 +230,14 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const selectedIds = this.selection.selected.map(user => user.id);
-        this.dataSource.data = this.dataSource.data.filter(user => !selectedIds.includes(user.id));
-        this.selection.clear();
-        this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', { duration: 3000 });
+        this.usersService.deleteMultipleUsers(selectedIds).subscribe(success => {
+          if (success) {
+            this.selection.clear();
+            this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', { duration: 3000 });
+            // รีโหลดข้อมูลใหม่
+            this.loadUsers();
+          }
+        });
       }
     });
   }
@@ -275,5 +296,17 @@ export class UsersListComponent implements OnInit, AfterViewInit {
 
   canNextPage(): boolean {
     return this.paginator?.hasNextPage() || false;
+  }
+
+  // เพิ่มฟังก์ชันใหม่สำหรับโหลดข้อมูล
+  private loadUsers() {
+    this.usersService.getUsers().subscribe(users => {
+      this.dataSource.data = users;
+    });
+  }
+
+  // เพิ่มฟังก์ชันสำหรับการคลิกที่ row
+  onRowClick(row: User): void {
+    this.selection.toggle(row);
   }
 }

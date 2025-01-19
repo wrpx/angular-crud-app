@@ -3,7 +3,7 @@
     {{ data ? 'แก้ไขผู้ใช้งาน' : 'เพิ่มผู้ใช้งาน' }}
   </h2>
 
-  <form [formGroup]="form" class="space-y-4">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
     <!-- ชื่อ-นามสกุล -->
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-gray-700">ชื่อ-นามสกุล</label>
@@ -63,7 +63,8 @@
       </button>
       <button
         type="submit"
-        class="min-w-[100px] px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+        [disabled]="!form.valid"
+        class="min-w-[100px] px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
       >
         บันทึก
       </button>

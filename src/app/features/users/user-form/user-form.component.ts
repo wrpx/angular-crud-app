@@ -30,7 +30,7 @@ import { UsersService } from '../users.service';
 export class UserFormComponent implements OnInit {
   form: FormGroup;
   isEditMode: boolean;
-  roles: string[] = ['ผู้ดูแลระบบ', 'ผู้ใช้งาน'];
+  roles: string[] = ['ผู้ดูแลระบบ', 'ผู้จัดการ', 'ผู้ใช้งานทั่วไป'];
 
   constructor(
     private fb: FormBuilder,
@@ -40,15 +40,26 @@ export class UserFormComponent implements OnInit {
   ) {
     this.isEditMode = !!data;
     this.form = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      fullName: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
+        Validators.pattern(/^[ก-๏a-zA-Z\s]+$/)
+      ]],
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]],
       role: ['', [Validators.required]]
     });
 
-    if (this.isEditMode) {
-      this.form.patchValue(data);
+    if (this.isEditMode && data) {
+      this.form.patchValue({
+        fullName: data.fullName,
+        email: data.email,
+        role: data.role
+      });
     }
   }
 
@@ -56,12 +67,33 @@ export class UserFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
+      const formData = {
+        ...this.form.value,
+        status: this.isEditMode ? this.data.status : 'active',
+        avatar: this.isEditMode ? this.data.avatar : `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        lastLogin: this.isEditMode ? this.data.lastLogin : new Date()
+      };
+
       if (this.isEditMode) {
-        this.usersService.updateUser(this.data.id, this.form.value)
-          .subscribe(() => this.dialogRef.close(true));
+        this.usersService.updateUser(this.data.id, formData)
+          .subscribe({
+            next: (updatedUser) => {
+              this.dialogRef.close(updatedUser);
+            },
+            error: (error) => {
+              console.error('Error updating user:', error);
+            }
+          });
       } else {
-        this.usersService.addUser(this.form.value)
-          .subscribe(() => this.dialogRef.close(true));
+        this.usersService.addUser(formData)
+          .subscribe({
+            next: (newUser) => {
+              this.dialogRef.close(newUser);
+            },
+            error: (error) => {
+              console.error('Error adding user:', error);
+            }
+          });
       }
     }
   }

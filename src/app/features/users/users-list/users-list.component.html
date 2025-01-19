@@ -19,13 +19,36 @@
 
         <div class="flex items-center gap-3">
           <button
-            mat-flat-button
+            mat-raised-button
             color="primary"
             (click)="openUserForm()"
+            [disabled]="isAddDisabled()"
             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
           >
             <mat-icon class="mr-2">add</mat-icon>
             เพิ่มผู้ใช้งาน
+          </button>
+
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="openUserForm(selection.selected[0])"
+            [disabled]="isEditDisabled()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
+          >
+            <mat-icon class="mr-2">edit</mat-icon>
+            แก้ไข
+          </button>
+
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="deleteSelectedUsers()"
+            [disabled]="selection.selected.length === 0"
+            class="bg-red-600 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
+          >
+            <mat-icon class="mr-2">delete</mat-icon>
+            ลบ
           </button>
 
           <mat-menu
@@ -178,44 +201,13 @@
               </td>
             </ng-container>
 
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef class="bg-gray-50"></th>
-              <td mat-cell *matCellDef="let row">
-                <button
-                  mat-icon-button
-                  [matMenuTriggerFor]="menu"
-                  class="text-gray-500 hover:text-gray-700"
-                >
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu
-                  #menu="matMenu"
-                  xPosition="before"
-                  class="min-w-[160px]"
-                >
-                  <button mat-menu-item (click)="openUserForm(row)">
-                    <mat-icon class="text-blue-600">edit</mat-icon>
-                    <span>แก้ไข</span>
-                  </button>
-                  <mat-divider></mat-divider>
-                  <button
-                    mat-menu-item
-                    (click)="deleteUser(row)"
-                    class="text-red-600"
-                  >
-                    <mat-icon class="text-red-600">delete</mat-icon>
-                    <span>ลบ</span>
-                  </button>
-                </mat-menu>
-              </td>
-            </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns"
-              class="hover:bg-gray-50 transition-colors"
+              (click)="onRowClick(row)"
+              [class.selected]="selection.isSelected(row)"
+              class="hover:bg-gray-50 transition-colors cursor-pointer"
             ></tr>
           </table>
         </div>
@@ -233,17 +225,6 @@
         <div>
           {{ selection.selected.length }} จาก
           {{ dataSource.filteredData.length }} รายการที่เลือก
-        </div>
-        <div *ngIf="selection.selected.length > 0">
-          <button
-            mat-stroked-button
-            color="warn"
-            (click)="deleteSelectedUsers()"
-            class="border border-red-300 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg"
-          >
-            <mat-icon class="mr-2">delete</mat-icon>
-            ลบรายการที่เลือก
-          </button>
         </div>
       </div>
     </mat-card-content>
