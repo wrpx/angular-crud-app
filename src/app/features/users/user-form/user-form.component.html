@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{isEditMode ? 'แก้ไขข้อมูลผู้ใช้' : 'เพิ่มผู้ใช้ใหม่'}}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>ชื่อ</mat-label>
+        <input matInput formControlName="firstName" placeholder="กรอกชื่อ">
+        <mat-error *ngIf="form.get('firstName')?.hasError('required')">
+          กรุณากรอกชื่อ
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>นามสกุล</mat-label>
+        <input matInput formControlName="lastName" placeholder="กรอกนามสกุล">
+        <mat-error *ngIf="form.get('lastName')?.hasError('required')">
+          กรุณากรอกนามสกุล
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>อีเมล</mat-label>
+      <input matInput formControlName="email" placeholder="example@email.com" type="email">
+      <mat-icon matSuffix>email</mat-icon>
+      <mat-error *ngIf="form.get('email')?.hasError('required')">
+        กรุณากรอกอีเมล
+      </mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">
+        รูปแบบอีเมลไม่ถูกต้อง
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>เบอร์โทรศัพท์</mat-label>
+      <input matInput formControlName="phone" placeholder="0891234567">
+      <mat-icon matSuffix>phone</mat-icon>
+      <mat-error *ngIf="form.get('phone')?.hasError('required')">
+        กรุณากรอกเบอร์โทรศัพท์
+      </mat-error>
+      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+        กรุณากรอกเบอร์โทรศัพท์ 10 หลัก
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>บทบาท</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{role}}
+        </mat-option>
+      </mat-select>
+      <mat-icon matSuffix>badge</mat-icon>
+      <mat-error *ngIf="form.get('role')?.hasError('required')">
+        กรุณาเลือกบทบาท
+      </mat-error>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="active" color="primary">
+      เปิดใช้งาน
+    </mat-slide-toggle>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close type="button">ยกเลิก</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      {{isEditMode ? 'บันทึก' : 'เพิ่ม'}}
+    </button>
+  </mat-dialog-actions>
+</form>
