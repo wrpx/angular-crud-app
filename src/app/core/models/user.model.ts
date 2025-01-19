@@ -1,10 +1,9 @@
 export interface User {
   id: number;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
-  phone: string;
-  role: string;
-  active: boolean;
-  createdAt: Date;
+  avatar: string;
+  role: 'ผู้ดูแลระบบ' | 'ผู้จัดการ' | 'ผู้ใช้งานทั่วไป';
+  status: 'active' | 'inactive';
+  lastLogin: Date;
 }

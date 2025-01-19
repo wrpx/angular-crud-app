@@ -9,23 +9,183 @@ export class UsersService {
   private users: User[] = [
     {
       id: 1,
-      firstName: 'จอห์น',
-      lastName: 'โด',
-      email: 'john@example.com',
-      phone: '0891234567',
+      fullName: 'สมชาย ใจดี',
+      email: 'somchai@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=1',
       role: 'ผู้ดูแลระบบ',
-      active: true,
-      createdAt: new Date()
+      status: 'active',
+      lastLogin: new Date('2025-01-19T10:30:00')
     },
     {
       id: 2,
-      firstName: 'เจน',
-      lastName: 'โด',
-      email: 'jane@example.com',
-      phone: '0891234568',
-      role: 'ผู้ใช้งาน',
-      active: true,
-      createdAt: new Date()
+      fullName: 'สมหญิง รักดี',
+      email: 'somying@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=2',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-18T15:45:00')
+    },
+    {
+      id: 3,
+      fullName: 'วิชัย สุขสันต์',
+      email: 'wichai@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=3',
+      role: 'ผู้จัดการ',
+      status: 'inactive',
+      lastLogin: new Date('2025-01-15T09:20:00')
+    },
+    {
+      id: 4,
+      fullName: 'รัตนา มั่นคง',
+      email: 'rattana@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=4',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T08:15:00')
+    },
+    {
+      id: 5,
+      fullName: 'ประเสริฐ ดีเลิศ',
+      email: 'prasert@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=5',
+      role: 'ผู้จัดการ',
+      status: 'active',
+      lastLogin: new Date('2025-01-17T16:30:00')
+    },
+    {
+      id: 6,
+      fullName: 'นภา สดใส',
+      email: 'napha@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=6',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T11:20:00')
+    },
+    {
+      id: 7,
+      fullName: 'สมศักดิ์ มีสุข',
+      email: 'somsak@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=7',
+      role: 'ผู้จัดการ',
+      status: 'active',
+      lastLogin: new Date('2025-01-18T14:30:00')
+    },
+    {
+      id: 8,
+      fullName: 'วันดี สุขสันต์',
+      email: 'wandee@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=8',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'inactive',
+      lastLogin: new Date('2025-01-16T09:45:00')
+    },
+    {
+      id: 9,
+      fullName: 'ชัยวัฒน์ รุ่งเรือง',
+      email: 'chaiwat@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=9',
+      role: 'ผู้ดูแลระบบ',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T10:15:00')
+    },
+    {
+      id: 10,
+      fullName: 'มานี มีทรัพย์',
+      email: 'manee@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=10',
+      role: 'ผู้จัดการ',
+      status: 'active',
+      lastLogin: new Date('2025-01-17T13:20:00')
+    },
+    {
+      id: 11,
+      fullName: 'สุชาติ ใจดี',
+      email: 'suchart@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=11',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T09:30:00')
+    },
+    {
+      id: 12,
+      fullName: 'พรทิพย์ สุขใจ',
+      email: 'porntip@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=12',
+      role: 'ผู้จัดการ',
+      status: 'inactive',
+      lastLogin: new Date('2025-01-15T11:45:00')
+    },
+    {
+      id: 13,
+      fullName: 'ธนพล รักษ์ดี',
+      email: 'thanapol@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=13',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-18T16:20:00')
+    },
+    {
+      id: 14,
+      fullName: 'สุภาพร ยิ้มแย้ม',
+      email: 'supaporn@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=14',
+      role: 'ผู้ดูแลระบบ',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T08:45:00')
+    },
+    {
+      id: 15,
+      fullName: 'อนันต์ มั่งมี',
+      email: 'anan@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=15',
+      role: 'ผู้จัดการ',
+      status: 'active',
+      lastLogin: new Date('2025-01-17T14:30:00')
+    },
+    {
+      id: 16,
+      fullName: 'วิภา สดใส',
+      email: 'wipa@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=16',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T10:45:00')
+    },
+    {
+      id: 17,
+      fullName: 'สมพงษ์ ใจเย็น',
+      email: 'sompong@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=17',
+      role: 'ผู้จัดการ',
+      status: 'inactive',
+      lastLogin: new Date('2025-01-16T13:20:00')
+    },
+    {
+      id: 18,
+      fullName: 'นงลักษณ์ สุขสม',
+      email: 'nonglak@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=18',
+      role: 'ผู้ใช้งานทั่วไป',
+      status: 'active',
+      lastLogin: new Date('2025-01-18T11:30:00')
+    },
+    {
+      id: 19,
+      fullName: 'ประพันธ์ มีเงิน',
+      email: 'prapan@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=19',
+      role: 'ผู้ดูแลระบบ',
+      status: 'active',
+      lastLogin: new Date('2025-01-19T09:15:00')
+    },
+    {
+      id: 20,
+      fullName: 'จินตนา รักสงบ',
+      email: 'jintana@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=20',
+      role: 'ผู้จัดการ',
+      status: 'active',
+      lastLogin: new Date('2025-01-17T15:45:00')
     }
   ];
 
@@ -43,11 +203,11 @@ export class UsersService {
     );
   }
 
-  addUser(user: Omit<User, 'id' | 'createdAt'>): Observable<User> {
+  addUser(user: Omit<User, 'id'>): Observable<User> {
     const newUser: User = {
       ...user,
       id: this.users.length + 1,
-      createdAt: new Date()
+      lastLogin: new Date()
     };
     this.users = [...this.users, newUser];
     this.usersSubject.next(this.users);
@@ -72,5 +232,11 @@ export class UsersService {
       return of(true);
     }
     return of(false);
+  }
+
+  deleteMultipleUsers(ids: number[]): Observable<boolean> {
+    this.users = this.users.filter(u => !ids.includes(u.id));
+    this.usersSubject.next(this.users);
+    return of(true);
   }
 }
