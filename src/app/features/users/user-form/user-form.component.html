@@ -4,30 +4,67 @@
   </h2>
 
   <form [formGroup]="form" class="space-y-4">
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>ชื่อ-นามสกุล</mat-label>
-      <input matInput formControlName="fullName">
-    </mat-form-field>
+    <!-- ชื่อ-นามสกุล -->
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">ชื่อ-นามสกุล</label>
+      <input
+        matInput
+        formControlName="fullName"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="กรอกชื่อ-นามสกุล"
+      >
+      @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
+        <span class="text-sm text-red-500">กรุณากรอกชื่อ-นามสกุล</span>
+      }
+    </div>
 
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>อีเมล</mat-label>
-      <input matInput formControlName="email" type="email">
-    </mat-form-field>
+    <!-- อีเมล -->
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">อีเมล</label>
+      <input
+        matInput
+        formControlName="email"
+        type="email"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Ex. example@domain.com"
+      >
+      @if (form.get('email')?.hasError('email') && !form.get('email')?.hasError('required')) {
+        <span class="text-sm text-red-500">กรุณากรอกอีเมลให้ถูกต้อง</span>
+      }
+      @if (form.get('email')?.hasError('required')) {
+        <span class="text-sm text-red-500">อีเมลจำเป็นต้องกรอก</span>
+      }
+    </div>
 
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>บทบาท</mat-label>
-      <mat-select formControlName="role">
-        <mat-option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</mat-option>
-        <mat-option value="ผู้จัดการ">ผู้จัดการ</mat-option>
-        <mat-option value="ผู้ใช้งานทั่วไป">ผู้ใช้งานทั่วไป</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!-- บทบาท -->
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">บทบาท</label>
+      <select
+        formControlName="role"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
+        <option value="ผู้จัดการ">ผู้จัดการ</option>
+        <option value="ผู้ใช้งานทั่วไป">ผู้ใช้งานทั่วไป</option>
+      </select>
+      @if (form.get('role')?.invalid && form.get('role')?.touched) {
+        <span class="text-sm text-red-500">กรุณาเลือกบทบาท</span>
+      }
+    </div>
 
+    <!-- ปุ่ม -->
     <div class="flex justify-end gap-3 mt-6">
-      <button mat-stroked-button type="button" (click)="onCancel()" class="min-w-[100px]">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="min-w-[100px] px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+      >
         ยกเลิก
       </button>
-      <button mat-flat-button color="primary" type="submit" class="min-w-[100px]">
+      <button
+        type="submit"
+        class="min-w-[100px] px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+      >
         บันทึก
       </button>
     </div>
