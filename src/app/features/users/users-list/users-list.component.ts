@@ -62,8 +62,8 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   // กำหนดค่าเริ่มต้น
-  pageSizeOptions = [5, 10, 20];
-  pageSize = 10;
+  pageSize = 5;
+  pageSizeOptions = [5, 10,];
 
   constructor(
     private dialog: MatDialog,
