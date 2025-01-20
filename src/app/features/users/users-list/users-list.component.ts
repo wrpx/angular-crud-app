@@ -40,9 +40,9 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
     MatCheckboxModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatDividerModule
+    MatDividerModule,
   ],
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class UsersListComponent implements OnInit, AfterViewInit {
   displayedColumns = [
@@ -52,7 +52,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     'email',
     'role',
     'status',
-    'lastLogin'
+    'lastLogin',
   ];
   dataSource = new MatTableDataSource<User>();
   selection = new SelectionModel<User>(true, []);
@@ -60,9 +60,8 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  // กำหนดค่าเริ่มต้น
   pageSize = 5;
-  pageSizeOptions = [5, 10,];
+  pageSizeOptions = [5, 10];
 
   constructor(
     private dialog: MatDialog,
@@ -70,7 +69,6 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {
-    // Mock data
     const mockUsers: User[] = [
       {
         id: 1,
@@ -116,28 +114,18 @@ export class UsersListComponent implements OnInit, AfterViewInit {
         role: 'ผู้จัดการ',
         status: 'active',
         lastLogin: new Date('2025-01-17T16:30:00'),
-      }
+      },
     ];
     this.dataSource.data = mockUsers;
   }
 
   ngOnInit() {
-    this.usersService.getUsers().subscribe(users => {
-      this.dataSource.data = users;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.loadUsers();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
-
-  formatAmount(amount: number): string {
-    return new Intl.NumberFormat('th-TH', {
-      style: 'currency',
-      currency: 'THB'
-    }).format(amount);
   }
 
   formatDate(date: Date): string {
@@ -177,39 +165,19 @@ export class UsersListComponent implements OnInit, AfterViewInit {
 
   openUserForm(user?: User): void {
     if (!user && this.selection.selected.length > 0) return;
-    
-    if (user && (this.isAllSelected() || this.selection.selected.length !== 1)) return;
-    
+
+    if (user && (this.isAllSelected() || this.selection.selected.length !== 1))
+      return;
+
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '500px',
-      data: user
+      data: user,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadUsers();
-      }
-    });
-  }
-
-  deleteUser(user: User) {
-    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
-      width: '400px',
-      data: {
-        title: 'ยืนยันการลบ',
-        message: `คุณต้องการลบผู้ใช้ "${user.fullName}" ใช่หรือไม่?`
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.usersService.deleteUser(user.id).subscribe(success => {
-          if (success) {
-            this.snackBar.open('ลบผู้ใช้สำเร็จ', 'ปิด', { duration: 3000 });
-            // รีโหลดข้อมูลใหม่
-            this.loadUsers();
-          }
-        });
+        this.selection.clear();
       }
     });
   }
@@ -223,21 +191,24 @@ export class UsersListComponent implements OnInit, AfterViewInit {
       width: '400px',
       data: {
         title: 'ยืนยันการลบ',
-        message: `คุณต้องการลบผู้ใช้ที่เลือกทั้งหมด ${this.selection.selected.length} รายการใช่หรือไม่?`
-      }
+        message: `คุณต้องการลบผู้ใช้ที่เลือกทั้งหมด ${this.selection.selected.length} รายการใช่หรือไม่?`,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        const selectedIds = this.selection.selected.map(user => user.id);
-        this.usersService.deleteMultipleUsers(selectedIds).subscribe(success => {
-          if (success) {
-            this.selection.clear();
-            this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', { duration: 3000 });
-            // รีโหลดข้อมูลใหม่
-            this.loadUsers();
-          }
-        });
+        const selectedIds = this.selection.selected.map((user) => user.id);
+        this.usersService
+          .deleteMultipleUsers(selectedIds)
+          .subscribe((success) => {
+            if (success) {
+              this.selection.clear();
+              this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', {
+                duration: 3000,
+              });
+              this.loadUsers();
+            }
+          });
       }
     });
   }
@@ -245,9 +216,10 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   toggleColumn(column: string) {
     const idx = this.displayedColumns.indexOf(column);
     if (idx > -1) {
-      this.displayedColumns = this.displayedColumns.filter(col => col !== column);
+      this.displayedColumns = this.displayedColumns.filter(
+        (col) => col !== column
+      );
     } else {
-      // Insert before actions column
       const actionsIndex = this.displayedColumns.indexOf('actions');
       this.displayedColumns.splice(actionsIndex, 0, column);
     }
@@ -269,43 +241,12 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     return columnNames[column] || column;
   }
 
-  copyId(id: string) {
-    navigator.clipboard.writeText(id);
-    this.snackBar.open('คัดลอกรหัสแล้ว', 'ปิด', {
-      duration: 2000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-    });
-  }
-
-  previousPage() {
-    if (this.paginator) {
-      this.paginator.previousPage();
-    }
-  }
-
-  nextPage() {
-    if (this.paginator) {
-      this.paginator.nextPage();
-    }
-  }
-
-  canPreviousPage(): boolean {
-    return this.paginator?.hasPreviousPage() || false;
-  }
-
-  canNextPage(): boolean {
-    return this.paginator?.hasNextPage() || false;
-  }
-
-  // เพิ่มฟังก์ชันใหม่สำหรับโหลดข้อมูล
   private loadUsers() {
-    this.usersService.getUsers().subscribe(users => {
+    this.usersService.getUsers().subscribe((users) => {
       this.dataSource.data = users;
     });
   }
 
-  // เพิ่มฟังก์ชันสำหรับการคลิกที่ row
   onRowClick(row: User): void {
     this.selection.toggle(row);
   }
