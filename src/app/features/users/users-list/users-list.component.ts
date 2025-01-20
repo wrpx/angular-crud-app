@@ -178,6 +178,15 @@ export class UsersListComponent implements OnInit, AfterViewInit {
       if (result) {
         this.loadUsers();
         this.selection.clear();
+        this.snackBar.open(
+          user ? 'แก้ไขผู้ใช้สำเร็จ' : 'เพิ่มผู้ใช้สำเร็จ',
+          'ปิด',
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -205,6 +214,8 @@ export class UsersListComponent implements OnInit, AfterViewInit {
               this.selection.clear();
               this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', {
                 duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
               });
               this.loadUsers();
             }
