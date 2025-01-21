@@ -96,6 +96,8 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   }
 
   isAllSelected(): boolean {
+    if (this.dataSource.data.length <= 1) return false;
+
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -125,7 +127,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '500px',
-      data: user,
+      data: user ? user : this.selection.selected[0],
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -178,7 +180,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
               horizontalPosition: 'center',
               verticalPosition: 'top',
             });
-          }
+          },
         });
       }
     });
@@ -224,7 +226,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
           horizontalPosition: 'center',
           verticalPosition: 'top',
         });
-      }
+      },
     });
   }
 
