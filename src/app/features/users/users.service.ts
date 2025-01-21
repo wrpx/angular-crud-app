@@ -1,208 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { User } from '../../core/models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
   private apiUrl = 'http://localhost:8080/api/users';
 
-  private users: User[] = [
-    {
-      id: 1,
-      fullName: 'สมชาย ใจดี',
-      email: 'somchai@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=1',
-      role: 'ผู้ดูแลระบบ',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T10:30:00')
-    },
-    {
-      id: 2,
-      fullName: 'สมหญิง รักดี',
-      email: 'somying@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-18T15:45:00')
-    },
-    {
-      id: 3,
-      fullName: 'วิชัย สุขสันต์',
-      email: 'wichai@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      role: 'ผู้จัดการ',
-      status: 'inactive',
-      lastLogin: new Date('2025-01-15T09:20:00')
-    },
-    {
-      id: 4,
-      fullName: 'รัตนา มั่นคง',
-      email: 'rattana@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=4',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T08:15:00')
-    },
-    {
-      id: 5,
-      fullName: 'ประเสริฐ ดีเลิศ',
-      email: 'prasert@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=5',
-      role: 'ผู้จัดการ',
-      status: 'active',
-      lastLogin: new Date('2025-01-17T16:30:00')
-    },
-    {
-      id: 6,
-      fullName: 'นภา สดใส',
-      email: 'napha@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=6',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T11:20:00')
-    },
-    {
-      id: 7,
-      fullName: 'สมศักดิ์ มีสุข',
-      email: 'somsak@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=7',
-      role: 'ผู้จัดการ',
-      status: 'active',
-      lastLogin: new Date('2025-01-18T14:30:00')
-    },
-    {
-      id: 8,
-      fullName: 'วันดี สุขสันต์',
-      email: 'wandee@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=8',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'inactive',
-      lastLogin: new Date('2025-01-16T09:45:00')
-    },
-    {
-      id: 9,
-      fullName: 'ชัยวัฒน์ รุ่งเรือง',
-      email: 'chaiwat@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=9',
-      role: 'ผู้ดูแลระบบ',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T10:15:00')
-    },
-    {
-      id: 10,
-      fullName: 'มานี มีทรัพย์',
-      email: 'manee@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=10',
-      role: 'ผู้จัดการ',
-      status: 'active',
-      lastLogin: new Date('2025-01-17T13:20:00')
-    },
-    {
-      id: 11,
-      fullName: 'สุชาติ ใจดี',
-      email: 'suchart@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=11',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T09:30:00')
-    },
-    {
-      id: 12,
-      fullName: 'พรทิพย์ สุขใจ',
-      email: 'porntip@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=12',
-      role: 'ผู้จัดการ',
-      status: 'inactive',
-      lastLogin: new Date('2025-01-15T11:45:00')
-    },
-    {
-      id: 13,
-      fullName: 'ธนพล รักษ์ดี',
-      email: 'thanapol@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=13',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-18T16:20:00')
-    },
-    {
-      id: 14,
-      fullName: 'สุภาพร ยิ้มแย้ม',
-      email: 'supaporn@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=14',
-      role: 'ผู้ดูแลระบบ',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T08:45:00')
-    },
-    {
-      id: 15,
-      fullName: 'อนันต์ มั่งมี',
-      email: 'anan@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=15',
-      role: 'ผู้จัดการ',
-      status: 'active',
-      lastLogin: new Date('2025-01-17T14:30:00')
-    },
-    {
-      id: 16,
-      fullName: 'วิภา สดใส',
-      email: 'wipa@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=16',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T10:45:00')
-    },
-    {
-      id: 17,
-      fullName: 'สมพงษ์ ใจเย็น',
-      email: 'sompong@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=17',
-      role: 'ผู้จัดการ',
-      status: 'inactive',
-      lastLogin: new Date('2025-01-16T13:20:00')
-    },
-    {
-      id: 18,
-      fullName: 'นงลักษณ์ สุขสม',
-      email: 'nonglak@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=18',
-      role: 'ผู้ใช้งานทั่วไป',
-      status: 'active',
-      lastLogin: new Date('2025-01-18T11:30:00')
-    },
-    {
-      id: 19,
-      fullName: 'ประพันธ์ มีเงิน',
-      email: 'prapan@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=19',
-      role: 'ผู้ดูแลระบบ',
-      status: 'active',
-      lastLogin: new Date('2025-01-19T09:15:00')
-    },
-    {
-      id: 20,
-      fullName: 'จินตนา รักสงบ',
-      email: 'jintana@example.com',
-      avatar: 'https://i.pravatar.cc/150?img=20',
-      role: 'ผู้จัดการ',
-      status: 'active',
-      lastLogin: new Date('2025-01-17T15:45:00')
-    }
-  ];
+  private users: User[] = [];
 
   private usersSubject = new BehaviorSubject<User[]>(this.users);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+    return this.http.get<User[]>(this.apiUrl).pipe(
+      map((users) =>
+        users.map((user) => ({
+          ...user,
+          lastLogin: new Date(user.lastLogin),
+        }))
+      )
+    );
   }
 
   getUserById(id: number): Observable<User | undefined> {
     return this.getUsers().pipe(
-      map(users => users.find(user => user.id === id))
+      map((users) => users.find((user) => user.id === id))
     );
   }
 
@@ -219,6 +45,7 @@ export class UsersService {
   }
 
   deleteMultipleUsers(ids: number[]): Observable<void> {
-    return this.http.request<void>('delete', this.apiUrl, { body: { ids } });
+    const params = new HttpParams().set('ids', ids.join(','));
+    return this.http.delete<void>(this.apiUrl, { params });
   }
 }

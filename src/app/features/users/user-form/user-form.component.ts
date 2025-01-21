@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../core/models/user.model';
 import { UsersService } from '../users.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-form',
@@ -36,7 +37,8 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private usersService: UsersService,
     private dialogRef: MatDialogRef<UserFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User
+    @Inject(MAT_DIALOG_DATA) public data: User,
+    private snackBar: MatSnackBar
   ) {
     this.isEditMode = !!data;
     this.form = this.fb.group({
@@ -82,6 +84,11 @@ export class UserFormComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error updating user:', error);
+              this.snackBar.open('เกิดข้อผิดพลาดในการแก้ไขผู้ใช้', 'ปิด', {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              });
             }
           });
       } else {
@@ -92,6 +99,11 @@ export class UserFormComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error adding user:', error);
+              this.snackBar.open('เกิดข้อผิดพลาดในการเพิ่มผู้ใช้', 'ปิด', {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              });
             }
           });
       }

@@ -69,54 +69,8 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar,
     private datePipe: DatePipe
   ) {
-    const mockUsers: User[] = [
-      {
-        id: 1,
-        fullName: 'สมชาย ใจดี',
-        email: 'somchai@example.com',
-        avatar: 'https://i.pravatar.cc/150?img=1',
-        role: 'ผู้ดูแลระบบ',
-        status: 'active',
-        lastLogin: new Date('2025-01-19T10:30:00'),
-      },
-      {
-        id: 2,
-        fullName: 'สมหญิง รักดี',
-        email: 'somying@example.com',
-        avatar: 'https://i.pravatar.cc/150?img=2',
-        role: 'ผู้ใช้งานทั่วไป',
-        status: 'active',
-        lastLogin: new Date('2025-01-18T15:45:00'),
-      },
-      {
-        id: 3,
-        fullName: 'วิชัย สุขสันต์',
-        email: 'wichai@example.com',
-        avatar: 'https://i.pravatar.cc/150?img=3',
-        role: 'ผู้จัดการ',
-        status: 'inactive',
-        lastLogin: new Date('2025-01-15T09:20:00'),
-      },
-      {
-        id: 4,
-        fullName: 'รัตนา มั่นคง',
-        email: 'rattana@example.com',
-        avatar: 'https://i.pravatar.cc/150?img=4',
-        role: 'ผู้ใช้งานทั่วไป',
-        status: 'active',
-        lastLogin: new Date('2025-01-19T08:15:00'),
-      },
-      {
-        id: 5,
-        fullName: 'ประเสริฐ ดีเลิศ',
-        email: 'prasert@example.com',
-        avatar: 'https://i.pravatar.cc/150?img=5',
-        role: 'ผู้จัดการ',
-        status: 'active',
-        lastLogin: new Date('2025-01-17T16:30:00'),
-      },
-    ];
-    this.dataSource.data = mockUsers;
+    // ลบ mockUsers ออก
+    // this.dataSource.data = mockUsers;
   }
 
   ngOnInit() {
@@ -259,8 +213,18 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   }
 
   private loadUsers() {
-    this.usersService.getUsers().subscribe((users) => {
-      this.dataSource.data = users;
+    this.usersService.getUsers().subscribe({
+      next: (users) => {
+        this.dataSource.data = users;
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.snackBar.open('เกิดข้อผิดพลาดในการโหลดผู้ใช้', 'ปิด', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
+      }
     });
   }
 
