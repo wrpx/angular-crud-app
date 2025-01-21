@@ -13,9 +13,9 @@
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder="กรอกชื่อ-นามสกุล"
       >
-      @if (form.get('fullName')?.invalid && form.get('fullName')?.touched) {
-        <span class="text-sm text-red-500">กรุณากรอกชื่อ-นามสกุล</span>
-      }
+      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+        กรุณากรอกชื่อ-นามสกุล
+      </span>
     </div>
 
     <!-- อีเมล -->
@@ -28,12 +28,12 @@
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder="Ex. example@domain.com"
       >
-      @if (form.get('email')?.hasError('email') && !form.get('email')?.hasError('required')) {
-        <span class="text-sm text-red-500">กรุณากรอกอีเมลให้ถูกต้อง</span>
-      }
-      @if (form.get('email')?.hasError('required')) {
-        <span class="text-sm text-red-500">อีเมลจำเป็นต้องกรอก</span>
-      }
+      <span class="text-sm text-red-500" *ngIf="form.get('email')?.hasError('email') && !form.get('email')?.hasError('required')">
+        กรุณากรอกอีเมลให้ถูกต้อง
+      </span>
+      <span class="text-sm text-red-500" *ngIf="form.get('email')?.hasError('required')">
+        อีเมลจำเป็นต้องกรอก
+      </span>
     </div>
 
     <!-- บทบาท -->
@@ -47,9 +47,9 @@
         <option value="ผู้จัดการ">ผู้จัดการ</option>
         <option value="ผู้ใช้งานทั่วไป">ผู้ใช้งานทั่วไป</option>
       </select>
-      @if (form.get('role')?.invalid && form.get('role')?.touched) {
-        <span class="text-sm text-red-500">กรุณาเลือกบทบาท</span>
-      }
+      <span class="text-sm text-red-500" *ngIf="form.get('role')?.invalid && form.get('role')?.touched">
+        กรุณาเลือกบทบาท
+      </span>
     </div>
 
     <!-- ปุ่ม -->

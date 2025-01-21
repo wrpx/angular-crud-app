@@ -207,19 +207,25 @@ export class UsersListComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const selectedIds = this.selection.selected.map((user) => user.id);
-        this.usersService
-          .deleteMultipleUsers(selectedIds)
-          .subscribe((success) => {
-            if (success) {
-              this.selection.clear();
-              this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', {
-                duration: 3000,
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-              });
-              this.loadUsers();
-            }
-          });
+        this.usersService.deleteMultipleUsers(selectedIds).subscribe({
+          next: () => {
+            this.selection.clear();
+            this.snackBar.open('ลบผู้ใช้ที่เลือกสำเร็จ', 'ปิด', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            });
+            this.loadUsers();
+          },
+          error: (error) => {
+            console.error('Error deleting users:', error);
+            this.snackBar.open('เกิดข้อผิดพลาดในการลบผู้ใช้', 'ปิด', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            });
+          }
+        });
       }
     });
   }

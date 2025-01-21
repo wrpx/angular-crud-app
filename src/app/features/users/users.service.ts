@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { User } from '../../core/models/user.model';
 
@@ -6,6 +7,8 @@ import { User } from '../../core/models/user.model';
   providedIn: 'root'
 })
 export class UsersService {
+  private apiUrl = 'http://localhost:8080/api/users';
+
   private users: User[] = [
     {
       id: 1,
@@ -191,10 +194,10 @@ export class UsersService {
 
   private usersSubject = new BehaviorSubject<User[]>(this.users);
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
-    return this.usersSubject.asObservable();
+    return this.http.get<User[]>(this.apiUrl);
   }
 
   getUserById(id: number): Observable<User | undefined> {
@@ -204,39 +207,18 @@ export class UsersService {
   }
 
   addUser(user: Omit<User, 'id'>): Observable<User> {
-    const newUser: User = {
-      ...user,
-      id: this.users.length + 1,
-      lastLogin: new Date()
-    };
-    this.users = [...this.users, newUser];
-    this.usersSubject.next(this.users);
-    return of(newUser);
+    return this.http.post<User>(this.apiUrl, user);
   }
 
-  updateUser(id: number, user: Partial<User>): Observable<User | undefined> {
-    const index = this.users.findIndex(u => u.id === id);
-    if (index !== -1) {
-      this.users[index] = { ...this.users[index], ...user };
-      this.usersSubject.next(this.users);
-      return of(this.users[index]);
-    }
-    return of(undefined);
+  updateUser(id: number, user: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}`, user);
   }
 
-  deleteUser(id: number): Observable<boolean> {
-    const index = this.users.findIndex(u => u.id === id);
-    if (index !== -1) {
-      this.users = this.users.filter(u => u.id !== id);
-      this.usersSubject.next(this.users);
-      return of(true);
-    }
-    return of(false);
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  deleteMultipleUsers(ids: number[]): Observable<boolean> {
-    this.users = this.users.filter(u => !ids.includes(u.id));
-    this.usersSubject.next(this.users);
-    return of(true);
+  deleteMultipleUsers(ids: number[]): Observable<void> {
+    return this.http.request<void>('delete', this.apiUrl, { body: { ids } });
   }
 }
