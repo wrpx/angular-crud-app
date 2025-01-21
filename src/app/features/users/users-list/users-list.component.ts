@@ -114,7 +114,7 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   }
 
   isEditDisabled(): boolean {
-    return this.isAllSelected() || this.selection.selected.length !== 1;
+    return this.selection.selected.length !== 1;
   }
 
   openUserForm(user?: User): void {
