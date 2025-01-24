@@ -1,13 +1,13 @@
-<div class="min-h-screen py-8">
-  <mat-card class="w-full max-w-7xl mx-auto bg-white shadow-lg rounded-lg">
-    <mat-card-header class="p-6">
-      <mat-card-title class="text-2xl font-bold text-gray-800"
+<div class="min-h-screen p-4">
+  <mat-card class="bg-white shadow-lg rounded-lg max-w-7xl mx-auto">
+    <mat-card-header class="p-4 md:p-6">
+      <mat-card-title class="text-xl md:text-2xl font-bold text-gray-800"
         >จัดการผู้ใช้งาน</mat-card-title
       >
     </mat-card-header>
-    <mat-card-content class="p-6">
-      <div class="mb-6 flex items-center gap-4">
-        <mat-form-field appearance="outline">
+    <mat-card-content class="p-4 md:p-6">
+      <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <mat-form-field appearance="outline" class="search-filter">
           <mat-icon matPrefix class="text-gray-400 mr-2">search</mat-icon>
           <input
             matInput
@@ -17,16 +17,17 @@
           />
         </mat-form-field>
 
-        <div class="flex items-center gap-3">
+        <div class="button-container">
           <button
             mat-raised-button
             color="primary"
             (click)="openUserForm()"
             [disabled]="isAddDisabled()"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
+            class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center"
           >
             <mat-icon class="mr-2">add</mat-icon>
-            เพิ่มผู้ใช้งาน
+            <span class="hidden md:inline">เพิ่มผู้ใช้งาน</span>
+            <span class="md:hidden">เพิ่ม</span>
           </button>
 
           <button
@@ -34,10 +35,10 @@
             color="accent"
             (click)="openUserForm(selection.selected[0])"
             [disabled]="isEditDisabled()"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
+            class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center"
           >
             <mat-icon class="mr-2">edit</mat-icon>
-            แก้ไข
+            <span class="hidden md:inline">แก้ไข</span>
           </button>
 
           <button
@@ -45,33 +46,11 @@
             color="warn"
             (click)="deleteSelectedUsers()"
             [disabled]="selection.selected.length === 0"
-            class="bg-red-600 text-white px-6 py-2.5 rounded-lg flex items-center w-48 justify-center mb-4"
+            class="bg-red-600 text-white rounded-lg flex items-center justify-center"
           >
             <mat-icon class="mr-2">delete</mat-icon>
-            ลบ
+            <span class="hidden md:inline">ลบ</span>
           </button>
-
-          <mat-menu
-            #columnMenu="matMenu"
-            xPosition="before"
-            class="min-w-[200px]"
-          >
-            <div class="p-2">
-              <div class="text-sm font-medium text-gray-700 px-3 py-2 border-b">
-                จัดการคอลัมน์
-              </div>
-              <ng-container *ngFor="let column of displayedColumns">
-                <mat-checkbox
-                  *ngIf="column !== 'select' && column !== 'actions'"
-                  (change)="toggleColumn(column)"
-                  [checked]="isColumnVisible(column)"
-                  class="mx-3 my-2 block"
-                >
-                  {{ getColumnName(column) }}
-                </mat-checkbox>
-              </ng-container>
-            </div>
-          </mat-menu>
         </div>
       </div>
 
@@ -80,7 +59,7 @@
           <table mat-table [dataSource]="dataSource" matSort class="w-full">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef class="bg-gray-50">
+              <th mat-header-cell *matHeaderCellDef class="bg-gray-50 w-16">
                 <mat-checkbox
                   (change)="$event ? masterToggle() : null"
                   [checked]="selection.hasValue() && isAllSelected()"
@@ -88,7 +67,7 @@
                 >
                 </mat-checkbox>
               </th>
-              <td mat-cell *matCellDef="let row">
+              <td mat-cell *matCellDef="let row" class="w-16">
                 <mat-checkbox
                   (click)="$event.stopPropagation()"
                   (change)="$event ? selection.toggle(row) : null"
@@ -100,13 +79,14 @@
 
             <!-- Avatar Column -->
             <ng-container matColumnDef="avatar">
-              <th mat-header-cell *matHeaderCellDef class="bg-gray-50">
+              <th mat-header-cell *matHeaderCellDef class="bg-gray-50 w-20">
                 {{ getColumnName("avatar") }}
               </th>
-              <td mat-cell *matCellDef="let row">
+              <td mat-cell *matCellDef="let row" class="w-20">
                 <img
                   [src]="row.avatar"
                   class="w-10 h-10 rounded-full object-cover"
+                  alt="Avatar"
                 />
               </td>
             </ng-container>
@@ -130,11 +110,13 @@
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                class="bg-gray-50"
+                class="bg-gray-50 mobile-hide"
               >
                 {{ getColumnName("email") }}
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+              <td mat-cell *matCellDef="let row" class="mobile-hide">
+                {{ row.email }}
+              </td>
             </ng-container>
 
             <!-- Role Column -->
@@ -149,7 +131,7 @@
               </th>
               <td mat-cell *matCellDef="let row">
                 <span
-                  class="px-3 py-1 rounded-full text-sm"
+                  class="px-2 py-1 rounded-full text-xs md:text-sm whitespace-nowrap"
                   [ngClass]="{
                     'bg-purple-100 text-purple-700': row.role === 'ผู้ดูแลระบบ',
                     'bg-blue-100 text-blue-700': row.role === 'ผู้จัดการ',
@@ -167,11 +149,11 @@
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                class="bg-gray-50"
+                class="bg-gray-50 mobile-hide"
               >
                 {{ getColumnName("status") }}
               </th>
-              <td mat-cell *matCellDef="let row">
+              <td mat-cell *matCellDef="let row" class="mobile-hide">
                 <span class="flex items-center">
                   <span
                     class="w-2 h-2 rounded-full mr-2"
@@ -192,11 +174,11 @@
                 mat-header-cell
                 *matHeaderCellDef
                 mat-sort-header
-                class="bg-gray-50"
+                class="bg-gray-50 mobile-hide"
               >
                 {{ getColumnName("lastLogin") }}
               </th>
-              <td mat-cell *matCellDef="let row">
+              <td mat-cell *matCellDef="let row" class="mobile-hide">
                 {{ formatDate(row.lastLogin) }}
               </td>
             </ng-container>
@@ -217,6 +199,7 @@
           [pageSize]="pageSize"
           showFirstLastButtons
           aria-label="Select page of users"
+          class="border-t border-gray-200"
         >
         </mat-paginator>
       </div>
