@@ -17,8 +17,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
-import { User } from '../../../core/models/user.model';
-import { UsersService } from '../../../core/service/users.service';
+import { User } from '../../../../core/models/user.model';
+import { UsersService } from '../../../../core/service/users.service';
+import { UserFormComponent } from '../../components/user-form/user-form.component';
+import { DeleteConfirmationDialogComponent } from '../../components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-users-list',
@@ -28,7 +30,7 @@ import { UsersService } from '../../../core/service/users.service';
   imports: [
     CommonModule,
     MatTableModule,
-    MatPaginatorModule,()
+    MatPaginatorModule,
     MatSortModule,
     MatCardModule,
     MatButtonModule,
@@ -39,9 +41,9 @@ import { UsersService } from '../../../core/service/users.service';
     MatCheckboxModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatDividerModule,
+    MatDividerModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe]
 })
 export class UsersListComponent implements OnInit, AfterViewInit {
   displayedColumns = [

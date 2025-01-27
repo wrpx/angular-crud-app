@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
-import { User } from '../../core/models/user.model';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, map, of, catchError, throwError } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,7 @@ export class UsersService {
       map((users) =>
         users.map((user) => ({
           ...user,
-          lastLogin: new Date(user.lastLogin),
+          lastLogin: new Date(user.lastLogin).toISOString(),
         }))
       )
     );
@@ -45,7 +45,22 @@ export class UsersService {
   }
 
   deleteMultipleUsers(ids: number[]): Observable<void> {
-    const params = new HttpParams().set('ids', ids.join(','));
-    return this.http.delete<void>(this.apiUrl, { params });
+    return this.http.delete<void>(this.apiUrl, { body: ids }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAllUsers(params?: any): Observable<any> {
+    return this.http.get<User[]>(this.apiUrl, { params }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+    if (error.error?.message) {
+      errorMessage = error.error.message;
+    }
+    return throwError(() => errorMessage);
   }
 }

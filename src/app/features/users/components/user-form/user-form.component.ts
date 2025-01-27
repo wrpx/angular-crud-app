@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../core/models/user.model';
-import { UsersService } from '../users.service';
+import { UsersService } from '../../../core/service/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -44,9 +44,9 @@ export class UserFormComponent implements OnInit {
     this.form = this.fb.group({
       fullName: ['', [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-        Validators.pattern(/^[ก-๏a-zA-Z\s]+$/)
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern(/^[ก-๏a-zA-Z]+$/)
       ]],
       email: ['', [
         Validators.required,
@@ -73,10 +73,22 @@ export class UserFormComponent implements OnInit {
         ...this.form.value,
         status: this.isEditMode ? this.data.status : 'active',
         avatar: this.isEditMode ? this.data.avatar : `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
-        lastLogin: this.isEditMode ? this.data.lastLogin : new Date()
+        lastLogin: this.isEditMode 
+          ? (typeof this.data.lastLogin === 'object' 
+            ? new Date(this.data.lastLogin).toISOString() 
+            : new Date().toISOString())
+          : new Date().toISOString()
       };
 
       if (this.isEditMode) {
+        if (!this.data.id) {
+          this.snackBar.open('ไม่พบ ID ของผู้ใช้', 'ปิด', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
+          return;
+        }
         this.usersService.updateUser(this.data.id, formData)
           .subscribe({
             next: (updatedUser) => {
@@ -84,7 +96,7 @@ export class UserFormComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error updating user:', error);
-              this.snackBar.open('เกิดข้อผิดพลาดในการแก้ไขผู้ใช้', 'ปิด', {
+              this.snackBar.open(`เกิดข้อผิดพลาด: ${error.error?.message || 'ไม่ทราบสาเหตุ'}`, 'ปิด', {
                 duration: 3000,
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
@@ -99,7 +111,7 @@ export class UserFormComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error adding user:', error);
-              this.snackBar.open('เกิดข้อผิดพลาดในการเพิ่มผู้ใช้', 'ปิด', {
+              this.snackBar.open(`เกิดข้อผิดพลาด: ${error.error?.message || 'ไม่ทราบสาเหตุ'}`, 'ปิด', {
                 duration: 3000,
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
