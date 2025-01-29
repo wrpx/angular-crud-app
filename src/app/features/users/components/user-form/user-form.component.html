@@ -12,8 +12,17 @@
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder="กรอกชื่อ-นามสกุล"
       >
-      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
-        กรุณากรอกชื่อ-นามสกุล
+      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.hasError('required') && form.get('fullName')?.touched">
+        กรุณากรอกชื่อ
+      </span>
+      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.hasError('pattern') && form.get('fullName')?.touched">
+        กรุณากรอกชื่อ-นามสกุลเป็นภาษาอังกฤษเท่านั้น
+      </span>
+      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.hasError('minlength') && form.get('fullName')?.touched">
+        ชื่อ-นามสกุลต้องมีความยาวอย่างน้อย 2 ตัวอักษร
+      </span>
+      <span class="text-sm text-red-500" *ngIf="form.get('fullName')?.hasError('maxlength') && form.get('fullName')?.touched">
+        ชื่อ-นามสกุลต้องมีความยาวไม่เกิน 50 ตัวอักษร
       </span>
     </div>
 

@@ -8,8 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../core/models/user.model';
-import { UsersService } from '../../../core/service/users.service';
+import { User } from '../../../../core/models/user.model';
+import { UsersService } from '../../../../core/service/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -26,7 +26,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSelectModule,
     MatSlideToggleModule,
     MatDialogModule
-  ]
+  ],
+  providers: [UsersService]
 })
 export class UserFormComponent implements OnInit {
   form: FormGroup;
@@ -45,8 +46,8 @@ export class UserFormComponent implements OnInit {
       fullName: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(30),
-        Validators.pattern(/^[ก-๏a-zA-Z]+$/)
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-Z\s]+$/)
       ]],
       email: ['', [
         Validators.required,
@@ -91,10 +92,10 @@ export class UserFormComponent implements OnInit {
         }
         this.usersService.updateUser(this.data.id, formData)
           .subscribe({
-            next: (updatedUser) => {
+            next: (updatedUser: User) => {
               this.dialogRef.close(updatedUser);
             },
-            error: (error) => {
+            error: (error: any) => {
               console.error('Error updating user:', error);
               this.snackBar.open(`เกิดข้อผิดพลาด: ${error.error?.message || 'ไม่ทราบสาเหตุ'}`, 'ปิด', {
                 duration: 3000,
@@ -106,10 +107,10 @@ export class UserFormComponent implements OnInit {
       } else {
         this.usersService.addUser(formData)
           .subscribe({
-            next: (newUser) => {
+            next: (newUser: User) => {
               this.dialogRef.close(newUser);
             },
-            error: (error) => {
+            error: (error: any) => {
               console.error('Error adding user:', error);
               this.snackBar.open(`เกิดข้อผิดพลาด: ${error.error?.message || 'ไม่ทราบสาเหตุ'}`, 'ปิด', {
                 duration: 3000,
