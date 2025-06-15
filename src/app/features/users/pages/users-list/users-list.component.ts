@@ -220,12 +220,12 @@ export class UsersListComponent implements OnInit, AfterViewInit {
   }
 
   private loadUsers() {
-    this.usersService.getAllUsers().subscribe({
-      next: (res) => {
+    this.usersService.getUsers().subscribe({
+      next: (res: User[]) => {
         this.users = res;
         this.dataSource.data = res;
       },
-      error: (err) => {
+      error: (err: string) => {
         console.error('Error loading users:', err);
         this.snackBar.open('เกิดข้อผิดพลาดในการโหลดผู้ใช้', 'ปิด', {
           duration: 3000,
